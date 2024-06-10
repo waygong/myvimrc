@@ -3,7 +3,7 @@ filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 " set rtp+=~/.vim/bundle/Vundle.vim
-set rtp+=C:/my/file/git/Vundle.vim/
+set rtp+=C:\my\file\git\Vundle.vim\
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -31,8 +31,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'vimwiki/vimwiki'
 " 修改位置與檔案副檔名
 let g:vimwiki_list = [
-  \ {'path'       :'C:/my/file/wiki/markdown',
-  \ 'path_html'   :'C:/my/file/wiki/html',
+  \ {'path'       :'C:\my\file\wiki\markdown',
+  \ 'path_html'   :'C:\my\file\wiki\html',
   \ 'syntax': 'markdown', 'ext': '.md',
   \ 'folding': 'syntax',
   \ }]
@@ -65,11 +65,11 @@ filetype plugin indent on    " required
 
 " vim 記住上次離開位置
 if has("autocmd")
-  au BufReadPost * if line("'\'") > 1 && line("'\'") <= line("$") | exe "normal! g'\"" | endif
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
 " vim mapping 打開 vimrc
-nnoremap \vv :e C:/my/file/git/myvimrc/.vimrc<CR>
+nnoremap \vv :e C:\my\file\git\myvimrc\.vimrc<CR>
 
 " vim 維持 backspace 刪除功能
 set backspace=indent,eol,start
@@ -101,6 +101,9 @@ autocmd BufRead,BufNewFile .vimrc setlocal foldmethod=expr foldexpr=getline(v:ln
 
 " vim mapping foldmethod 為 syntax
 nnoremap \ff :set foldmethod=syntax<CR>
+
+" vimwiki mapping 跳轉到日期首頁
+nnoremap \dd :VimwikiDiaryIndex<CR>
 
 " vim nerotree 設定起始資料夾or檔案
 "" autocmd VimEnter * NERDTree C:\my\file\wiki\markdown\
