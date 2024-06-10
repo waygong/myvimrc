@@ -125,5 +125,5 @@ let g:NERDTreeMouseMode = 3
 autocmd BufWinEnter *.md if &modifiable | NERDTreeFind | NERDTreeFocus | endif
 autocmd BufLeave *.md if &modifiable | setlocal foldmethod=syntax | execute "normal zM" | endif
 
-" vimrc 自動折疊
-autocmd BufRead .vimrc if &modifiable | setlocal foldmethod=syntax | execute "normal zM" | endif
+" vimrc 檔自動折疊
+autocmd BufRead .vimrc if &modifiable | setlocal foldmethod=expr foldexpr=getline(v:lnum)=~'^\\s*\"' | execute "normal zM" | endif
