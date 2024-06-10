@@ -31,11 +31,11 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'vimwiki/vimwiki'
 " 修改位置與檔案副檔名
 let g:vimwiki_list = [
-                        \ {'path'       :'C:/my/file/wiki/markdown',
-                        \ 'path_html'   :'C:/my/file/wiki/html',
-                        \ 'syntax': 'markdown', 'ext': '.md',
-                        \ 'folding': 'syntax',
-                        \ }]
+  \ {'path'       :'C:/my/file/wiki/markdown',
+  \ 'path_html'   :'C:/my/file/wiki/html',
+  \ 'syntax': 'markdown', 'ext': '.md',
+  \ 'folding': 'syntax',
+  \ }]
 
 Plugin 'preservim/nerdtree'
 " 如果文件可修改，則在 NERDTree 中找到並將光標移動到該文件，然後執行 'R' 命令
