@@ -43,15 +43,6 @@ let g:vimwiki_list = [
   \ }]
 
 Plugin 'preservim/nerdtree'
-" 如果文件可修改，則在 NERDTree 中找到並將光標移動到該文件，然後執行 'R' 命令
-"" autocmd BufEnter * if &modifiable | NERDTreeFind | NERDTreeFocus | execute "normal R" | wincmd p | set foldmethod=syntax | endif | endif
-autocmd BufEnter * if &modifiable | NERDTreeFind | NERDTreeFocus | execute "normal R" | wincmd p | endif
-" 資料夾和檔案前綴不要顯示^G
-let g:NERDTreeNodeDelimiter = "\u00a0"
-" 設定側邊欄寬度
-let g:NERDTreeWinSize = 60
-" 單擊檔案或資料夾時就開啟
-let g:NERDTreeMouseMode = 3
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -96,9 +87,9 @@ nnoremap <F5> :execute '!start /B ' . getline('.')<CR>
 nnoremap <F8> :silent execute '!explorer ' . expand('%:p:h')<CR>
 
 " vim 用 windows 預設程式開啟當前行檔案
-nnoremap <F9> :silent execute '!start /B ' . getline('.')<CR>
+"" nnoremap <F9> :silent execute '!start /B ' . getline('.')<CR>
 " vim 當開啟某檔案就將路徑切到該檔所在資料夾
-autocmd BufEnter * silent! lcd %:p:h
+"" autocmd BufEnter * silent! lcd %:p:h
 
 " 加入 git 到 vim path (避免部分電腦無法使用 vundle)
 let $PATH = $PATH . ';C:\Program Files\Git\cmd'
@@ -108,12 +99,6 @@ let $PATH = $PATH . ';C:\Program Files\Git\cmd'
 
 " vim 顯示行號
 set nu
-
-" vimrc 隱藏所有註解
-autocmd BufRead,BufNewFile .vimrc setlocal foldmethod=expr foldexpr=getline(v:lnum)=~'^\\s*\"'
-
-" vim mapping foldmethod 為 syntax
-nnoremap \ff :set foldmethod=syntax<CR>
 
 " vimwiki mapping 跳轉到日期首頁
 nnoremap \dd :VimwikiDiaryIndex<CR>
@@ -129,3 +114,17 @@ nnoremap <M-Down> :normal ddp<CR>
 " vim mapping 跳轉or產生年月日的 vimwiki markdown 檔
 nnoremap \w\Y :silent! execute "edit C:\\my\\file\\wiki\\markdown\\diary\\" . strftime("%Y\\%Y") . ".md"<CR>
 nnoremap \w\M :silent! execute "edit C:\\my\\file\\wiki\\markdown\\diary\\" . strftime("%Y\\%m\\%m") . ".md"<CR>
+
+" 資料夾和檔案前綴不要顯示^G
+let g:NERDTreeNodeDelimiter = "\u00a0"
+" 設定側邊欄寬度
+let g:NERDTreeWinSize = 60
+" 單擊檔案或資料夾時就開啟
+let g:NERDTreeMouseMode = 3
+
+" markdown 檔自動折疊 & 更新 nerotree
+autocmd BufWinEnter *.md if &modifiable | NERDTreeFind | NERDTreeFocus | endif
+autocmd BufLeave *.md if &modifiable | setlocal foldmethod=syntax | execute normal "zM" | endif
+
+" vimrc 自動折疊
+autocmd BufRead .vimrc if &modifiable | setlocal foldmethod=syntax | execute normal "zM" | endif
