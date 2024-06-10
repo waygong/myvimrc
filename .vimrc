@@ -37,7 +37,6 @@ let g:vimwiki_list = [
   \ {'path'       :'C:\my\file\wiki\markdown',
   \ 'path_html'   :'C:\my\file\wiki\html',
   \ 'syntax': 'markdown', 'ext': '.md',
-  \ 'folding': 'syntax',
   \ 'diary_rel_path': 'diary/'.current_year.'/'.current_month.'/'.current_day,
   \ 'diary_index': "../".current_month,
   \ }]
@@ -124,7 +123,7 @@ let g:NERDTreeMouseMode = 3
 
 " markdown 檔自動折疊 & 更新 nerotree
 autocmd BufWinEnter *.md if &modifiable | NERDTreeFind | NERDTreeFocus | endif
-autocmd BufLeave *.md if &modifiable | setlocal foldmethod=syntax | execute normal "zM" | endif
+autocmd BufLeave *.md if &modifiable | setlocal foldmethod=syntax | execute "normal zM" | endif
 
 " vimrc 自動折疊
-autocmd BufRead .vimrc if &modifiable | setlocal foldmethod=syntax | execute normal "zM" | endif
+autocmd BufRead .vimrc if &modifiable | setlocal foldmethod=syntax | execute "normal zM" | endif
