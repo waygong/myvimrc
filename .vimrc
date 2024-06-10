@@ -30,11 +30,16 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'vimwiki/vimwiki'
 " 修改位置與檔案副檔名
+let current_year = strftime("%Y")
+let current_month = strftime("%m")
+let current_day = strftime("%d")
 let g:vimwiki_list = [
   \ {'path'       :'C:\my\file\wiki\markdown',
   \ 'path_html'   :'C:\my\file\wiki\html',
   \ 'syntax': 'markdown', 'ext': '.md',
   \ 'folding': 'syntax',
+  \ 'diary_rel_path': 'diary/'.current_year.'/'.current_month.'/'.current_day,
+  \ 'diary_index': "../".current_month,
   \ }]
 
 Plugin 'preservim/nerdtree'
@@ -86,6 +91,14 @@ set hlsearch
 
 " vim 執行當前行
 nnoremap <F5> :execute '!start /B ' . getline('.')<CR>
+
+" vim 開啟當前檔案資料夾
+nnoremap <F8> :silent execute '!explorer ' . expand('%:p:h')<CR>
+
+" vim 用 windows 預設程式開啟當前行檔案
+nnoremap <F9> :silent execute '!start /B ' . getline('.')<CR>
+" vim 當開啟某檔案就將路徑切到該檔所在資料夾
+autocmd BufEnter * silent! lcd %:p:h
 
 " 加入 git 到 vim path (避免部分電腦無法使用 vundle)
 let $PATH = $PATH . ';C:\Program Files\Git\cmd'
