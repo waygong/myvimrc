@@ -160,7 +160,7 @@ set guifont=Consolas:h11
 nnoremap <F5> :execute '!start /B ' . getline('.')<CR>
 
 " vim 切換資料夾到當前檔案
-nnoremap <F7> :silent! lcd %:p:h
+nnoremap <F7> :silent! lcd %:p:h<CR>
 
 " vim 開啟當前檔案資料夾
 nnoremap <F8> :silent execute '!explorer ' . expand('%:p:h')<CR>
