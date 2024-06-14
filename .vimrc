@@ -136,7 +136,7 @@ autocmd FileType vimwiki highlight VimwikiHeader6 guifg=#BA55D3 gui=bold gui=und
 
 " vimwiki 螢光筆功能
 autocmd FileType vimwiki highlight VimwikiCode guibg=pink
-autocmd FileType vimwiki highlight VimwikiBold guibg=lightred
+autocmd FileType vimwiki highlight VimwikiBold guibg=yellow
 autocmd FileType vimwiki highlight VimwikiBoldItalic guibg=lightgreen
 autocmd FileType vimwiki highlight VimwikiLink guibg=lightblue
 nnoremap <leader>1 :let keyword=expand("<cWORD>")<CR>:execute "normal! ciW"."`".keyword."`"<CR>
