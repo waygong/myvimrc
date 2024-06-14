@@ -79,16 +79,8 @@ syntax on
 " vim 高亮所有搜尋文字
 set hlsearch
 
-" vim 執行當前行
-nnoremap <F5> :execute '!start /B ' . getline('.')<CR>
-
-" vim 開啟當前檔案資料夾
-nnoremap <F8> :silent execute '!explorer ' . expand('%:p:h')<CR>
-
-" vim 用 windows 預設程式開啟當前行檔案
-"" nnoremap <F9> :silent execute '!start /B ' . getline('.')<CR>
-" vim 當開啟某檔案就將路徑切到該檔所在資料夾
-"" autocmd BufEnter * silent! lcd %:p:h
+" vim 設定主題
+colorscheme shine
 
 " 加入 git 到 vim path (避免部分電腦無法使用 vundle)
 let $PATH = $PATH . ';C:\Program Files\Git\cmd'
@@ -121,9 +113,69 @@ let g:NERDTreeWinSize = 60
 " 單擊檔案或資料夾時就開啟
 let g:NERDTreeMouseMode = 3
 
-" markdown 檔自動折疊 & 更新 nerotree
+" vim 存檔時檢查資料夾是否存在，若不存在就自動建立資料夾
+augroup Mkdir
+    autocmd!
+    autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
+augroup END
+
+" markdown 檔設定折疊 & 更新 nerotree
 autocmd BufWinEnter *.md if &modifiable | NERDTreeFind | NERDTreeFocus | endif
-autocmd BufEnter *.md if &modifiable | setlocal foldmethod=syntax | execute "normal zM" | endif
+autocmd BufEnter *.md if &modifiable | setlocal foldmethod=syntax | endif
 
 " vimrc 檔自動折疊
 autocmd BufRead .vimrc if &modifiable | setlocal foldmethod=expr foldexpr=getline(v:lnum)=~'^\\s*\"' | execute "normal zM" | endif
+
+" vimwiki 標題高亮
+autocmd FileType vimwiki highlight VimwikiHeader1 guifg=#FF6347 gui=bold gui=underline
+autocmd FileType vimwiki highlight VimwikiHeader2 guifg=#A52A2A gui=bold gui=underline
+autocmd FileType vimwiki highlight VimwikiHeader3 guifg=#FF8C00 gui=bold gui=underline
+autocmd FileType vimwiki highlight VimwikiHeader4 guifg=#32CD32 gui=bold gui=underline
+autocmd FileType vimwiki highlight VimwikiHeader5 guifg=#40E0D0 gui=bold gui=underline
+autocmd FileType vimwiki highlight VimwikiHeader6 guifg=#BA55D3 gui=bold gui=underline
+
+" vimwiki 螢光筆功能
+autocmd FileType vimwiki highlight VimwikiCode guibg=pink
+autocmd FileType vimwiki highlight VimwikiBold guibg=lightred
+autocmd FileType vimwiki highlight VimwikiBoldItalic guibg=lightgreen
+autocmd FileType vimwiki highlight VimwikiLink guibg=lightblue
+nnoremap <leader>1 :let keyword=expand("<cWORD>")<CR>:execute "normal! ciW"."`".keyword."`"<CR>
+nnoremap <leader>2 :let keyword=expand("<cWORD>")<CR>:execute "normal! ciW"."**".keyword."**"<CR>
+nnoremap <leader>3 :let keyword=expand("<cWORD>")<CR>:execute "normal! ciW"."***".keyword."***"<CR>
+nnoremap <leader>4 :let keyword=expand("<cWORD>")<CR>:execute "normal! ciW"."[".keyword."]()"<CR>
+vnoremap <leader>1 c`<C-R>"`<Esc>
+vnoremap <leader>2 c**<C-R>"**<Esc>
+vnoremap <leader>3 c***<C-R>"***<Esc>
+vnoremap <leader>4 c[<C-R>"]()<Esc>
+
+" vimwiki 自動縮進&取消縮進
+autocmd FileType vimwiki setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd FileType markdown,vimwiki inoremap <buffer> <Tab> <C-o>ma<C-o>I<Space><Space><Esc>`a2l
+autocmd FileType markdown,vimwiki inoremap <buffer> <S-Tab> <C-o>ma<C-o>I<BS><BS><Esc>`a2h
+
+" vim 設定字體與大小
+set guifont=Consolas:h11
+
+" vim 執行當前行
+nnoremap <F5> :execute '!start /B ' . getline('.')<CR>
+
+" vim 切換資料夾到當前檔案
+nnoremap <F7> :silent! lcd %:p:h
+
+" vim 開啟當前檔案資料夾
+nnoremap <F8> :silent execute '!explorer ' . expand('%:p:h')<CR>
+
+" vim 用 windows 預設程式開啟當前行檔案
+"" nnoremap <F9> :silent execute '!start /B ' . getline('.')<CR>
+
+" vimwiki 開啟檔案路徑往前n層相對應的微軟官網文件
+function! EchoURL(n)
+    let l:file_path = expand('%:p')
+    let l:parts = split(l:file_path, '\\')
+    let l:url_parts = l:parts[-a:n:]
+    let l:url = 'https://learn.microsoft.com/zh-tw/' . join(l:url_parts, '/')
+    let l:url = substitute(l:url, '\.md$', '', '') " 移除 .md
+    call setreg('+', l:url)
+    silent execute '!start ' . l:url
+endfunction
+nnoremap <F10> :<C-u>call EchoURL(v:count1)<CR>
