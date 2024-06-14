@@ -121,7 +121,7 @@ augroup END
 
 " markdown 檔設定折疊 & 更新 nerotree
 autocmd BufWinEnter *.md if &modifiable | NERDTreeFind | NERDTreeFocus | endif
-autocmd BufEnter *.md if &modifiable | setlocal foldmethod=syntax | endif
+" autocmd BufEnter *.md if &modifiable | setlocal foldmethod=syntax | endif
 
 " vimrc 檔自動折疊
 autocmd BufRead .vimrc if &modifiable | setlocal foldmethod=expr foldexpr=getline(v:lnum)=~'^\\s*\"' | execute "normal zM" | endif
