@@ -2,8 +2,13 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-" set rtp+=~/.vim/bundle/Vundle.vim
-set rtp+=C:\my\file\git\Vundle.vim\
+if has('gui_running')
+    " gvim 的配置
+    set rtp+=C:\my\file\git\Vundle.vim\
+else
+    " 非 gvim 的配置
+    set rtp+=~/.vim/bundle/Vundle.vim/
+endif
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -64,7 +69,11 @@ if has("autocmd")
 endif
 
 " vim mapping 打開 vimrc
-nnoremap \vv :e C:\my\file\git\myvimrc\.vimrc<CR>
+if has('gui_running')
+    nnoremap \vv :e C:\my\file\git\myvimrc\.vimrc<CR>
+else
+    nnoremap \vv :e /mnt/c/my/file/git/myvimrc/.vimrc<CR>
+endif
 
 " vim 維持 backspace 刪除功能
 set backspace=indent,eol,start
@@ -80,23 +89,33 @@ syntax on
 set hlsearch
 
 " vim 設定主題
-colorscheme shine
+if has('gui_running')
+    colorscheme shine
+else
+    colorscheme ron
+endif
 
 " 加入 git 到 vim path (避免部分電腦無法使用 vundle)
 let $PATH = $PATH . ';C:\Program Files\Git\cmd'
 
 " vim 顯示相對行號
-" set rnu
+set rnu
 
 " vim 顯示行號
-set nu
+" set nu
 
 " vimwiki mapping 跳轉到日期首頁
 nnoremap \dd :VimwikiDiaryIndex<CR>
 
 " vim nerotree 設定起始資料夾or檔案
-"" autocmd VimEnter * NERDTree C:\my\file\wiki\markdown\
-au GUIEnter * silent execute "edit C:\\my\\file\\wiki\\markdown\\index.md | redraw!"
+if !exists("g:vim_started")
+    if has('gui_running')
+        au GUIEnter * silent execute "edit C:\\my\\file\\wiki\\markdown\\index.md | redraw!"
+    else
+        " au VimEnter * silent execute "edit /mnt/c/my/file/wiki/markdown/index.md | redraw!"
+    endif
+    let g:vim_started = 1
+endif
 
 " vim 設定將整row上下移動的快捷鍵 (這方法比 :m .+1 好，因為他可以移動折疊後的 row)
 nnoremap <M-Up> :normal ddkP<CR>
