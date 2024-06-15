@@ -107,7 +107,7 @@ set rnu
 " vimwiki mapping 跳轉到日期首頁
 nnoremap \dd :VimwikiDiaryIndex<CR>
 
-" vim nerotree 設定起始資料夾or檔案
+" vim nerdtree 設定起始資料夾or檔案
 if !exists("g:vim_started")
     if has('gui_running')
         au GUIEnter * silent execute "edit C:\\my\\file\\wiki\\markdown\\index.md | redraw!"
@@ -138,7 +138,7 @@ augroup Mkdir
     autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
 augroup END
 
-" markdown 檔設定折疊 & 更新 nerotree
+" markdown 檔設定折疊 & 更新 nerdtree
 autocmd BufWinEnter *.md if &modifiable | NERDTreeFind | NERDTreeFocus | endif
 " autocmd BufEnter *.md if &modifiable | setlocal foldmethod=syntax | endif
 
