@@ -38,15 +38,27 @@ Plugin 'vimwiki/vimwiki'
 let current_year = strftime("%Y")
 let current_month = strftime("%m")
 let current_day = strftime("%d")
-let g:vimwiki_list = [
-  \ {'path'       :'C:\my\file\wiki\markdown',
-  \ 'path_html'   :'C:\my\file\wiki\html',
-  \ 'syntax': 'markdown', 'ext': '.md',
-  \ 'diary_rel_path': 'diary/'.current_year.'/'.current_month.'/'.current_day,
-  \ 'diary_index': "../".current_month,
-  \ }]
+if has('gui_running')
+    let g:vimwiki_list = [
+      \ {'path'       :'C:\my\file\wiki\markdown',
+      \ 'path_html'   :'C:\my\file\wiki\html',
+      \ 'syntax': 'markdown', 'ext': '.md',
+      \ 'diary_rel_path': 'diary/'.current_year.'/'.current_month.'/'.current_day,
+      \ 'diary_index': "../".current_month,
+      \ }]
+else
+    let g:vimwiki_list = [
+      \ {'path'       :'/mnt/c/my/file/wiki/markdown',
+      \ 'path_html'   :'/mnt/c/my/file/wiki/html',
+      \ 'syntax': 'markdown', 'ext': '.md',
+      \ 'diary_rel_path': 'diary/'.current_year.'/'.current_month.'/'.current_day,
+      \ 'diary_index': "../".current_month,
+      \ }]
+endif
 
 Plugin 'preservim/nerdtree'
+
+Plugin 'francoiscabrol/ranger.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -90,9 +102,11 @@ set hlsearch
 
 " vim 設定主題
 if has('gui_running')
-    colorscheme shine
+    " colorscheme shine
+    colorscheme morning
 else
-    colorscheme ron
+    " colorscheme delek
+    colorscheme morning
 endif
 
 " 加入 git 到 vim path (避免部分電腦無法使用 vundle)
@@ -145,19 +159,38 @@ autocmd BufWinEnter *.md if &modifiable | NERDTreeFind | NERDTreeFocus | endif
 " vimrc 檔自動折疊
 autocmd BufRead .vimrc if &modifiable | setlocal foldmethod=expr foldexpr=getline(v:lnum)=~'^\\s*\"' | execute "normal zM" | endif
 
+" 讓 vim 支援 24 位元的真彩色
+set termguicolors
+
 " vimwiki 標題高亮
-autocmd FileType vimwiki highlight VimwikiHeader1 guifg=#FF6347 gui=bold gui=underline
-autocmd FileType vimwiki highlight VimwikiHeader2 guifg=#A52A2A gui=bold gui=underline
-autocmd FileType vimwiki highlight VimwikiHeader3 guifg=#FF8C00 gui=bold gui=underline
-autocmd FileType vimwiki highlight VimwikiHeader4 guifg=#32CD32 gui=bold gui=underline
-autocmd FileType vimwiki highlight VimwikiHeader5 guifg=#40E0D0 gui=bold gui=underline
-autocmd FileType vimwiki highlight VimwikiHeader6 guifg=#BA55D3 gui=bold gui=underline
+if has('gui_running')
+    autocmd FileType vimwiki highlight VimwikiHeader1 guifg=#FF6347 gui=bold gui=underline
+    autocmd FileType vimwiki highlight VimwikiHeader2 guifg=#A52A2A gui=bold gui=underline
+    autocmd FileType vimwiki highlight VimwikiHeader3 guifg=#FF8C00 gui=bold gui=underline
+    autocmd FileType vimwiki highlight VimwikiHeader4 guifg=#32CD32 gui=bold gui=underline
+    autocmd FileType vimwiki highlight VimwikiHeader5 guifg=#40E0D0 gui=bold gui=underline
+    autocmd FileType vimwiki highlight VimwikiHeader6 guifg=#BA55D3 gui=bold gui=underline
+else
+    autocmd FileType vimwiki highlight VimwikiHeader1 ctermfg=196 cterm=bold cterm=underline
+    autocmd FileType vimwiki highlight VimwikiHeader2 ctermfg=88 cterm=bold cterm=underline
+    autocmd FileType vimwiki highlight VimwikiHeader3 ctermfg=208 cterm=bold cterm=underline
+    autocmd FileType vimwiki highlight VimwikiHeader4 ctermfg=82 cterm=bold cterm=underline
+    autocmd FileType vimwiki highlight VimwikiHeader5 ctermfg=45 cterm=bold cterm=underline
+    autocmd FileType vimwiki highlight VimwikiHeader6 ctermfg=141 cterm=bold cterm=underline
+endif
 
 " vimwiki 螢光筆功能
-autocmd FileType vimwiki highlight VimwikiCode guibg=pink
-autocmd FileType vimwiki highlight VimwikiBold guibg=yellow
-autocmd FileType vimwiki highlight VimwikiBoldItalic guibg=lightgreen
-autocmd FileType vimwiki highlight VimwikiLink guibg=lightblue
+if has('gui_running')
+    autocmd FileType vimwiki highlight VimwikiCode guibg=pink
+    autocmd FileType vimwiki highlight VimwikiBold guibg=yellow
+    autocmd FileType vimwiki highlight VimwikiBoldItalic guibg=lightgreen
+    autocmd FileType vimwiki highlight VimwikiLink guibg=lightblue
+else
+    autocmd FileType vimwiki highlight VimwikiCode ctermbg=217
+    autocmd FileType vimwiki highlight VimwikiBold ctermbg=yellow
+    autocmd FileType vimwiki highlight VimwikiBoldItalic ctermbg=lightgreen
+    autocmd FileType vimwiki highlight VimwikiLink ctermbg=lightblue
+endif
 nnoremap <leader>1 :let keyword=expand("<cWORD>")<CR>:execute "normal! ciW"."`".keyword."`"<CR>
 nnoremap <leader>2 :let keyword=expand("<cWORD>")<CR>:execute "normal! ciW"."**".keyword."**"<CR>
 nnoremap <leader>3 :let keyword=expand("<cWORD>")<CR>:execute "normal! ciW"."***".keyword."***"<CR>
@@ -174,6 +207,15 @@ autocmd FileType markdown,vimwiki inoremap <buffer> <S-Tab> <C-o>ma<C-o>I<BS><BS
 
 " vim 設定字體與大小
 set guifont=Consolas:h11
+
+" 在 vim 中打開 ranger
+if has('gui_running')
+    " 在 gvim 中通過 WSL 啟動 ranger
+    " command! Ranger execute 'terminal wsl ranger'
+else
+    " 使用 :Ranger 命令在 Vim 中打開 ranger
+    command! Ranger execute 'Ranger'
+endif
 
 " vim 執行當前行
 nnoremap <F5> :execute '!start /B ' . getline('.')<CR>
