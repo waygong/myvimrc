@@ -91,8 +91,8 @@ endif
 set backspace=indent,eol,start
 
 " vim 插入當前時間
-nnoremap \tt "=strftime('%Y-%m-%d %H:%M:%S ')<CR>P
-inoremap \tt <CR>=strftime('%Y-%m-%d %H:%M:%S ')<CR>P
+nnoremap \tt "=strftime('%H:%M ')<CR>P
+inoremap \tt <C-R>=strftime('%H:%M ')<CR>
 
 " vim 高亮
 syntax on
